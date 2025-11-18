@@ -110,9 +110,32 @@
           "type": "array",
           "description": "A list of benefits announced by the company",
           "items": { "type": "string" }
+        },
+        "keywords": {
+          "type": "array",
+          "description": "A list of keywords extracted from the job description.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "The keyword or skill."
+              },
+              "group": {
+                "type": "array",
+                "description": "A list of groups the keyword belongs to.",
+                "items":  {
+                  "type": "string"
+                }
+              }
+            },
+            "required": ["label", "group"]
+          }
         }
       },
-      "required": ["metadata", "company", "responsibilities", "qualifications"]
+      "required": [
+        "metadata", "company", "responsibilities", "qualifications"
+      ]
     }
   },
   "required": ["jd"]
