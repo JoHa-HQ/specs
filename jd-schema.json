@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Job Description Schema",
+  "description": "A schema for validating Job Description (JD) YAML files.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "company": {
+      "type": "string",
+      "description": "The name of the company."
+    },
+    "provider": {
+      "type": "string",
+      "description": "The name of the job posting provider."
+    },
+    "title": {
+      "type": "string",
+      "description": "The job title."
+    },
+    "location": {
+      "type": "string",
+      "description": "The location of the job."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL to the job posting."
+    },
+    "description": {
+      "type": "string",
+      "description": "A general description of the job or company."
+    },
+    "responsibilities": {
+      "type": "array",
+      "description": "A list of job responsibilities.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "qualifications": {
+      "type": "array",
+      "description": "A list of required qualifications.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bonus_points": {
+      "type": "array",
+      "description": "A list of preferred or bonus qualifications.",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "company", "title", "location", "url", "description", "responsibilities", "qualifications"
+  ]
+}

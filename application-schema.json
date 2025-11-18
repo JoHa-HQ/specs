@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application Schema",
+  "description": "A schema for validating application tracking YAML files.",
+  "type": "object",
+  "properties": {
+    "application": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier for the application (UUIDv7).",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "status": {
+            "type": "array",
+            "description": "A history of status changes for the application.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string",
+                  "description": "The status of the application at this point in time.",
+                  "enum": [
+                    "draft",
+                    "applied",
+                    "screening",
+                    "technical interview",
+                    "behavioural interview",
+                    "final interview",
+                    "rejected",
+                    "offer"
+                  ]
+                },
+                "notes": {
+                    "type": "array",
+                    "description": "Specific notes with respect to the particular status",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "action_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "The date of this status change."
+                }
+              },
+              "required": ["state", "action_date"]
+            }
+          },
+          "jd": {
+            "type": "object",
+            "description": "Reference to the job description file.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "A path"
+              },
+              "commit": {
+                "type": "string",
+                "description": "A commit pointing to the specific file version"
+              }
+            },
+            "required": ["name", "commit"]
+          },
+          "cv": {
+            "type": "object",
+            "description": "Reference to the CV file used.",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "commit": {
+                "type": "string"
+              }
+            },
+            "required": ["name", "commit"]
+          },
+          "cover_letter": {
+            "type": "string",
+            "description": "The content of the cover letter sent. The optimal length for a cover letter is between 250-400 words"
+          },
+          "notes": {
+            "type": "array",
+            "description": "Specific notes and tailoring strategies for the application.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "follow_ups": {
+            "type": "array",
+            "description": "Planned follow-up actions.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": { "type": "string", "format": "date" },
+                "action": { "type": "string" },
+                "status": { "type": "string", "enum": ["pending", "done"] }
+              },
+              "required": ["date", "action", "status"]
+            }
+          }
+        },
+        "required": ["id", "application_url", "status", "action_date", "jd", "cv", "cover_letter"]
+      }
+  },
+  "required": ["application"]
+}
