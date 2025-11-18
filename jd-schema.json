@@ -5,54 +5,115 @@
   "type": "object",
   "additionalProperties": true,
   "properties": {
-    "company": {
-      "type": "string",
-      "description": "The name of the company."
-    },
-    "provider": {
-      "type": "string",
-      "description": "The name of the job posting provider."
-    },
-    "title": {
-      "type": "string",
-      "description": "The job title."
-    },
-    "location": {
-      "type": "string",
-      "description": "The location of the job."
-    },
-    "url": {
-      "type": "string",
-      "format": "uri",
-      "description": "The URL to the job posting."
-    },
-    "description": {
-      "type": "string",
-      "description": "A general description of the job or company."
-    },
-    "responsibilities": {
-      "type": "array",
-      "description": "A list of job responsibilities.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "qualifications": {
-      "type": "array",
-      "description": "A list of required qualifications.",
-      "items": {
-        "type": "string"
-      }
-    },
-    "bonus_points": {
-      "type": "array",
-      "description": "A list of preferred or bonus qualifications.",
-      "items": {
-        "type": "string"
-      }
+    "jd": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "description": "The name of the job posting provider."
+            },
+            "location": {
+              "type": "string",
+              "description": "The location of the job."
+            },
+            "employment_type": {
+              "type": "string",
+              "description": "The type of employment (e.g., Full-time, Part-time, Contract)."
+            },
+            "source_url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to the job posting."
+            },
+            "salary_range": {
+              "type": "string",
+              "description": "The salary range for the position."
+            }
+          },
+          "required": ["provider", "location", "employment_type", "source_url"]
+        },
+        "company": {
+          "type": "object",
+          "description": "Information about the company and the role.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the company."
+            },
+            "description": {
+              "type": "string",
+              "description": "A description of the company."
+            },
+            "role": {
+              "type": "object",
+              "description": "Details about the specific role.",
+              "properties": {
+                "position": {
+                  "type": "string",
+                  "description": "The job position title."
+                },
+                "team": {
+                  "type": "string",
+                  "description": "The team the position belongs to."
+                },
+                "summary": {
+                  "type": "string",
+                  "description": "A summary of the role."
+                }
+              },
+              "required": ["position", "team", "summary"]
+            }
+          },
+          "required": ["name", "description", "role"]
+        },
+        "responsibilities": {
+          "type": "array",
+          "description": "A list of job responsibilities.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": { 
+                "type": "string",
+                "description": "A logical group describing a mix of skillset, domain knowledge, etc" 
+              },
+              "details": {
+                "type": "array",
+                "description": "A list of key pieces of expertise essential for the role",
+                "items": { 
+                  "type": "string" 
+                }
+              }
+            }
+          }
+        },
+        "qualifications": {
+          "type": "array",
+          "description": "A list of qualifications for the role.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "skill": { "type": "string", "description": "The name of the skill or qualification." },
+              "level": { "type": "string", "description": "The expected proficiency level for the skill." },
+              "necessity": {
+                "type": "string",
+                "description": "The importance of the skill for the role.",
+                "enum": ["required", "preferred", "optional"]
+              }
+            },
+            "required": ["skill", "level", "necessity"]
+          }
+        },
+        "benefits": {
+          "type": "array",
+          "description": "A list of benefits announced by the company",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["metadata", "company", "responsibilities", "qualifications"]
     }
   },
-  "required": [
-    "company", "title", "location", "url", "description", "responsibilities", "qualifications"
-  ]
+  "required": ["jd"]
 }
