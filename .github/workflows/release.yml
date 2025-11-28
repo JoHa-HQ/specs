@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version to release (e.g., v1.0.0)'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        run: |
+          # Get the latest tag, or the first commit if no tags exist
+          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+            PREVIOUS_TAG=$(git describe --tags --abbrev=0)
+          else
+            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+          fi
+          echo "Generating changelog from $PREVIOUS_TAG to HEAD"
+          echo "## Changelog" > CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:'* %s (%h)' >> CHANGELOG.md
+
+      - name: Create and push tag
+        run: |
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        run: gh release create ${{ github.event.inputs.version }} --notes-file CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
