@@ -48,6 +48,87 @@
               "required": ["state", "action_date"]
             }
           },
+          "offer": {
+            "type": "object",
+            "properties": {
+              "action_date": {
+                "type": "string",
+                "format": "date",
+                "description": "The date the offer was received."
+              },
+              "status": {
+                "type": "string",
+                "enum": ["pending", "accepted", "rejected", "negotiating"],
+                "description": "The current status of the offer."
+              },
+              "deadline": {
+                "type": "string",
+                "format": "date",
+                "description": "The deadline to accept or reject the offer."
+              },
+              "compensation": {
+                "type": "object",
+                "description": "The base compensation package.",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "description": "The compensation amount."
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "The currency of the compensation (e.g., USD, EUR)."
+                  },
+                  "frequency": {
+                    "type": "string",
+                    "enum": ["yearly", "monthly", "hourly"],
+                    "description": "The frequency of the compensation."
+                  }
+                },
+                "required": ["amount", "currency", "frequency"]
+              },
+              "bonus": {
+                "type": "array",
+                "description": "A list of bonuses included in the offer. Can be monetary (e.g., amount: 5000, item_type: 'USD') or non-monetary (e.g., amount: 1, item_type: 'Laptop').",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "amount": {
+                      "type": "number",
+                      "description": "The quantity of the bonus item."
+                    },
+                    "item_type": {
+                      "type": "string",
+                      "description": "The type of bonus item (e.g., USD, Laptop, 'days off')."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Additional details about the bonus."
+                    }
+                  },
+                  "required": ["amount", "item_type"]
+                }
+              },
+              "equity": {
+                "type": "object",
+                "description": "The equity package included in the offer.",
+                "properties": {
+                  "shares": {
+                    "type": "number",
+                    "description": "The number of shares or stock options."
+                  },
+                  "vesting_schedule": {
+                    "type": "string",
+                    "description": "The vesting schedule for the equity (e.g., '4 years with a 1-year cliff')."
+                  },
+                  "strike_price": {
+                    "type": "number",
+                    "description": "The strike price for stock options."
+                  }
+                }
+              }
+            },
+            "required": ["action_date", "status", "compensation"]
+          },
           "jd": {
             "type": "object",
             "description": "Reference to the job description file.",
@@ -101,7 +182,7 @@
             }
           }
         },
-        "required": ["id", "application_url", "status", "action_date", "jd", "cv", "cover_letter"]
+        "required": ["id", "application_url", "status", "jd", "cv", "cover_letter"]
       }
   },
   "required": ["application"]
