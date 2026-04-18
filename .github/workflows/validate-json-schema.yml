@@ -1,0 +1,26 @@
+name: Validate JSON Schema
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ajv-cli
+        run: npm install -g ajv-cli
+
+      - name: Validate application-schema.json
+        run: ajv compile -s application-schema.json --strict=false
+
+      - name: Validate jd-schema.json
+        run: ajv compile -s jd-schema.json --strict=false
